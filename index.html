@@ -11,54 +11,111 @@
         rel="stylesheet">
     <style>
         :root {
-            --primary-color: #4A4A6A;
-            --secondary-color: #7DBE8C;
-            --accent-color: #4fa5e2;
-            --dark-bg: #2F2F3F;
-            --light-text: #FFFFFF;
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            --gradient: linear-gradient(135deg, #4A4A6A 0%, #3F3F4F 100%);
+            --primary-color: #2D3436;
+            --secondary-color: #00B894;
+            --accent-color: #0984E3;
+            --dark-bg: #1E1E26;
+            --light-bg: #F5F6FA;
+            --white: #FFFFFF;
+            --light-text: #FDFDFD;
+            --dark-text: #2D3436;
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.15);
+            --gradient: linear-gradient(135deg, #2D3436 0%, #1E1E26 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            scroll-behavior: smooth;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background-color: #f5f5f7;
-            color: #333;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
             line-height: 1.6;
+            overflow-x: hidden;
         }
 
         header {
-            background: var(--gradient);
+            background: rgba(45, 52, 54, 0.95);
+            backdrop-filter: blur(10px);
             color: var(--light-text);
-            padding: 1.5rem 0;
-            box-shadow: var(--shadow);
-            position: relative;
-            overflow: hidden;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
         }
 
         .container {
-            width: 90%;
+            width: 92%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
 
-        .hero {
+        .header-content {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lang-switcher {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .lang-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: #fff;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .flag {
+            width: 18px;
+            height: 12px;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .flag img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .hero {
+            position: relative;
+            min-height: 80vh;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 4rem 0;
+            padding: 6rem 0;
             text-align: center;
-            background: var(--gradient);
             color: var(--light-text);
-            position: relative;
+            background: var(--gradient);
+            overflow: hidden;
         }
 
         .hero::before {
@@ -68,25 +125,36 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(125, 190, 140, 0.1)"/></svg>');
+            background-image: url('images/hero.png');
             background-size: cover;
+            background-position: center;
+            opacity: 0.3;
             z-index: 0;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(to top, var(--light-bg), transparent);
+            z-index: 1;
         }
 
         .hero-content {
             position: relative;
-            z-index: 1;
-            max-width: 800px;
+            z-index: 2;
+            max-width: 900px;
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 1rem;
             color: var(--light-text);
             display: flex;
             align-items: center;
-            justify-content: center;
         }
 
         .logo span {
@@ -94,156 +162,364 @@
         }
 
         .logo-icon {
-            margin-right: 10px;
-            font-size: 2.8rem;
+            margin-right: 12px;
+            font-size: 2.2rem;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: clamp(2.5rem, 5vw, 4rem);
             margin-bottom: 1.5rem;
-            line-height: 1.2;
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: -1px;
         }
 
         .subtitle {
-            font-size: 1.5rem;
-            margin-bottom: 2rem;
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            margin-bottom: 2.5rem;
             opacity: 0.9;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
 
         .btn {
             display: inline-block;
             background-color: var(--secondary-color);
             color: white;
-            padding: 12px 30px;
-            border-radius: 30px;
+            padding: 14px 36px;
+            border-radius: 50px;
             text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-            margin: 0 10px;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0, 184, 148, 0.3);
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 184, 148, 0.4);
         }
 
         .btn-outline {
             background-color: transparent;
-            border: 2px solid var(--light-text);
+            border: 2px solid var(--white);
+            box-shadow: none;
         }
 
         .btn-outline:hover {
-            background-color: var(--light-text);
+            background-color: var(--white);
             color: var(--primary-color);
         }
 
-        .screenshot {
-            max-width: 90%;
-            margin: 3rem auto 0;
-            border-radius: 10px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
+        .hero-mockup {
+            margin-top: 4rem;
             position: relative;
             z-index: 2;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            border: 8px solid rgba(255, 255, 255, 0.1);
         }
 
-        .screenshot:hover {
-            transform: translateY(-5px);
+        .hero-mockup img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
         }
 
-        .features {
-            padding: 5rem 0;
-            background-color: white;
+        .hero-mockup:hover img {
+            transform: scale(1.02);
+        }
+
+        .section {
+            padding: 6rem 0;
         }
 
         .section-title {
             text-align: center;
-            margin-bottom: 3rem;
-            font-size: 2.2rem;
+            margin-bottom: 4rem;
+        }
+
+        .section-title h2 {
+            font-size: 2.5rem;
             color: var(--primary-color);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: #636e72;
+            font-size: 1.1rem;
         }
 
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
         }
 
         .feature-card {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            background-color: var(--white);
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
             text-align: center;
+            border: 1px solid #f1f2f6;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--secondary-color);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
         }
 
         .feature-card:hover {
             transform: translateY(-10px);
+            box-shadow: var(--shadow-md);
+            border-color: transparent;
+        }
+
+        .feature-card:hover::before {
+            transform: scaleX(1);
         }
 
         .feature-icon {
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 1.5rem;
-            color: var(--accent-color);
+            display: inline-block;
+            background: #f1f2f6;
+            width: 80px;
+            height: 80px;
+            line-height: 80px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover .feature-icon {
+            background: var(--secondary-color);
+            color: white;
+            transform: rotate(10deg);
         }
 
         .feature-title {
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             margin-bottom: 1rem;
             color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .video-gallery {
+            background: var(--white);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .artwork-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid #f1f2f6;
+        }
+
+        .artwork-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .artwork-media {
+            width: 100%;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            background: #000;
+            display: block;
+        }
+
+        .artwork-info {
+            padding: 1.5rem;
+        }
+
+        .artist-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .artwork-description {
+            color: #636e72;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+
+        .artist-link {
+            display: inline-block;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .artist-link:hover {
+            color: var(--accent-color);
         }
 
         .testimonials {
-            padding: 5rem 0;
-            background-color: #f9f9f9;
+            background-color: #f9f9fb;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
 
         .testimonial-card {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 2rem;
+            background-color: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+
+        .testimonial-card::after {
+            content: "“";
+            position: absolute;
+            top: 10px;
+            right: 30px;
+            font-size: 5rem;
+            color: #f1f2f6;
+            font-family: serif;
         }
 
         .testimonial-text {
             font-style: italic;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
+            color: #2D3436;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
         }
 
-        .testimonial-author {
-            font-weight: 600;
+        .testimonial-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+        }
+
+        .user-info h4 {
+            font-size: 1rem;
             color: var(--primary-color);
         }
 
+        .user-info p {
+            font-size: 0.85rem;
+            color: #636e72;
+        }
+
         .cta {
-            padding: 5rem 0;
-            text-align: center;
             background: var(--gradient);
             color: var(--light-text);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 40%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.05);
+            transform: rotate(30deg);
         }
 
         footer {
             background-color: var(--dark-bg);
-            color: var(--light-text);
-            padding: 2rem 0;
-            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 3rem;
+            text-align: left;
+        }
+
+        .footer-title {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
         }
 
         .footer-links {
             display: flex;
-            justify-content: center;
-            margin: 1rem 0;
+            flex-direction: column;
             gap: 10px;
-            flex-wrap: wrap;
         }
 
         .footer-links a {
-            color: var(--light-text);
-            margin: 0 15px;
+            color: rgba(255, 255, 255, 0.6);
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -254,299 +530,455 @@
 
         .social-links {
             display: flex;
-            gap: 14px;
-            justify-content: center;
-            align-items: center;
-            margin-top: 0.75rem;
-            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 1rem;
         }
 
         .social-links a {
-            color: #fff;
-            text-decoration: none;
-            background: rgba(255, 255, 255, 0.15);
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: background 0.2s ease, transform 0.2s ease;
+            background: rgba(255, 255, 255, 0.1);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            transition: all 0.3s ease;
         }
 
         .social-links a:hover {
-            background: rgba(255, 255, 255, 0.25);
-            transform: translateY(-2px);
+            background: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: white;
+            outline: none;
+        }
+
+        .contact-form input:focus, .contact-form textarea:focus {
+            border-color: var(--secondary-color);
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.9rem;
-            }
-
-            .subtitle {
-                font-size: 1rem;
-            }
-
-            .btn {
-                display: block;
-                margin: 10px auto;
-                width: 90%;
-                max-width: 420px;
-            }
-
-            header .logo {
-                font-size: 1.8rem;
-            }
-
-            .hero {
-                padding: 2.5rem 0;
-            }
-
-            .screenshot {
-                max-width: 100%;
-                margin-top: 2rem;
-            }
+            h1 { font-size: 2.5rem; }
+            .hero { padding: 4rem 0; }
+            .btn-group { flex-direction: column; }
+            .btn { width: 100%; }
         }
 
-        /* Galería de artistas */
-        .gallery-section {
-            padding: 4rem 0;
-            background: #ffffff;
-        }
-
-        .gallery-grid {
-            display: grid;
-            /* 3 columnas en pantallas anchas, 2 en medianas, 1 en móviles */
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            margin-top: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-            .gallery-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 600px) {
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .artwork-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            display: flex;
-            flex-direction: column;
-        }
-
-        .artwork-media {
-            width: 100%;
-            aspect-ratio: 4 / 3;
-            /* mantiene proporción visual consistente */
-            height: auto;
-            object-fit: cover;
-            /* llena el cuadro sin deformar */
-            display: block;
-            background: #f5f5f7;
-        }
-
-        .artwork-info {
-            padding: 1.2rem;
-        }
-
-        .artist-link {
-            display: inline-block;
-            margin-top: 0.8rem;
-            padding: 8px 14px;
-            border-radius: 8px;
-            background: var(--secondary-color);
-            color: #fff;
-            text-decoration: none;
-            font-weight: 500;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
-        }
-
-        .artist-link:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .artist-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--primary-color);
-            margin: 0 0 0.4rem 0;
-        }
-
-        .artwork-description {
-            color: #666;
-            font-size: 0.95rem;
-            margin: 0;
-        }
     </style>
 </head>
 
 <body>
     <header>
-        <div class="container">
+        <div class="container header-content">
             <div class="logo">
-                <span class="logo-icon">🖌️</span> Trazo Chino
+                <span class="logo-icon">🖌️</span> <span data-i18n="brand">Trazo Chino</span>
+            </div>
+            <div class="lang-switcher" aria-label="Language selector">
+                <button class="lang-btn active" data-lang="es" title="Español">
+                    <span class="flag"><img alt="ES" src="https://flagcdn.com/w20/es.png"></span>
+                    <span>ES</span>
+                </button>
+                <button class="lang-btn" data-lang="en" title="English">
+                    <span class="flag"><img alt="EN" src="https://flagcdn.com/w20/gb.png"></span>
+                    <span>EN</span>
+                </button>
             </div>
         </div>
     </header>
 
     <section class="hero">
         <div class="container hero-content">
-            <h1>Libera tu creatividad con <span style="color: var(--secondary-color);">Trazo Chino</span></h1>
-            <p class="subtitle">Software de animación y dibujo profesional con herramientas intuitivas para artistas de
-                todos los niveles</p>
-            <div>
-                <a href="#download" class="btn">Descargar Ahora</a>
-                <a href="#features" class="btn btn-outline">Explorar Funciones</a>
+            <h1 data-i18n="hero_title">Libera tu creatividad con <span style="color: var(--secondary-color);">Trazo Chino</span></h1>
+            <p class="subtitle" data-i18n="hero_subtitle">Software de animación y dibujo profesional diseñado por artistas para artistas. Herramientas intuitivas que rompen las barreras de la creación.</p>
+            <div class="btn-group">
+                <a href="#download" class="btn" data-i18n="download_now">Descargar Ahora</a>
+                <a href="#features" class="btn btn-outline" data-i18n="explore_features">Explorar Funciones</a>
+            </div>
+            <div class="hero-mockup">
+                <img src="images/hero.png" alt="Trazo Chino Showcase" id="main-hero-img">
             </div>
         </div>
-        <img src="imagen de trazo chino con logo.png" alt="Trazo Chino Interface" class="screenshot">
     </section>
 
-    <section class="features" id="features">
+    <section class="section" id="features">
         <div class="container">
-            <h2 class="section-title">Características Principales</h2>
+            <div class="section-title">
+                <h2 data-i18n="features_title">Potencia tu Arte</h2>
+                <p data-i18n="features_desc">Todo lo que necesitas para llevar tus dibujos al siguiente nivel</p>
+            </div>
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🎨</div>
-                    <h3 class="feature-title">Múltiples Capas</h3>
-                    <p>Organiza tu trabajo con un sistema de capas flexible que te permite controlar cada elemento de tu
-                        animación.</p>
+                    <h3 class="feature-title" data-i18n="feat_layers_title">Sistema de Capas Pro</h3>
+                    <p data-i18n="feat_layers_desc">Gestión avanzada de capas con modos de fusión, máscaras y grupos para un control total sobre tu composición.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">⏱️</div>
-                    <h3 class="feature-title">Línea de Tiempo</h3>
-                    <p>Gestiona tus fotogramas con una línea de tiempo intuitiva para crear animaciones fluidas y
-                        profesionales.</p>
+                    <h3 class="feature-title" data-i18n="feat_timeline_title">Línea de Tiempo Fluida</h3>
+                    <p data-i18n="feat_timeline_desc">Línea de tiempo basada en fotogramas clave con herramientas de cebolla (onion skinning) para animaciones perfectas.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">✏️</div>
-                    <h3 class="feature-title">Herramientas de Dibujo</h3>
-                    <p>Desde lápices y pinceles hasta herramientas de selección y relleno, todo lo que necesitas para
-                        dar vida a tus ideas.</p>
+                    <h3 class="feature-title" data-i18n="feat_tools_title">Pinceles Adaptativos</h3>
+                    <p data-i18n="feat_tools_desc">Motor de pinceles de alta respuesta con soporte para sensibilidad a la presión y estabilización de trazo.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔄</div>
-                    <h3 class="feature-title">Rotación y Transformación</h3>
-                    <p>Manipula tus dibujos con precisión gracias a las herramientas de rotación, escala y
-                        transformación.</p>
+                    <h3 class="feature-title" data-i18n="feat_transform_title">Transformación No Destructiva</h3>
+                    <p data-i18n="feat_transform_desc">Escala, rota y deforma tus dibujos sin perder calidad ni comprometer el trazo original.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🎬</div>
-                    <h3 class="feature-title">Exportación de Video</h3>
-                    <p>Exporta tus animaciones como secuencias de imágenes o directamente como videos MP4 de alta
-                        calidad.</p>
+                    <h3 class="feature-title" data-i18n="feat_export_title">Renderizado de Alta Velocidad</h3>
+                    <p data-i18n="feat_export_desc">Exporta tus obras maestras en múltiples formatos (MP4, GIF, PNG) con optimización para redes sociales.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">💾</div>
-                    <h3 class="feature-title">Guardado de Proyectos</h3>
-                    <p>Guarda y recupera tus proyectos en cualquier momento para continuar tu trabajo sin perder ningún
-                        detalle.</p>
+                    <h3 class="feature-title" data-i18n="feat_save_title">Flujo de Trabajo Cloud</h3>
+                    <p data-i18n="feat_save_desc">Auto-guardado inteligente y compatibilidad con formatos estándar de la industria para integración perfecta.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="gallery-section" id="gallery">
+    <section class="section video-gallery" id="videos">
         <div class="container">
-            <h2 class="section-title">Galería de Artistas</h2>
-            <p style="text-align:center; margin-bottom:2rem;">Descubre las increíbles creaciones hechas por nuestra
-                comunidad usando Trazo Chino</p>
+            <div class="section-title">
+                <h2 data-i18n="videos_section_title">Hecho con Trazo Chino</h2>
+                <p data-i18n="videos_section_desc">Mira la potencia de nuestras herramientas en acción</p>
+            </div>
             <div class="gallery-grid">
-                <!-- Cada tarjeta representa una obra -->
+                <div class="artwork-card">
+                    <video src="videos/Raton.mp4" class="artwork-media" autoplay loop muted playsinline></video>
+                    <div class="artwork-info">
+                        <h3 class="artist-name" data-i18n="vid_raton_title">Dinámica de Personajes</h3>
+                        <p class="artwork-description" data-i18n="vid_raton_desc">Simulación de fluidez y peso en animaciones 2D.</p>
+                    </div>
+                </div>
+                <div class="artwork-card">
+                    <video src="videos/Viejito girando.mp4" class="artwork-media" autoplay loop muted playsinline></video>
+                    <div class="artwork-info">
+                        <h3 class="artist-name" data-i18n="vid_viejito_girando_title">Perspectiva 3D</h3>
+                        <p class="artwork-description" data-i18n="vid_viejito_girando_desc">Rotación de volúmenes compleja en entorno plano.</p>
+                    </div>
+                </div>
+                <div class="artwork-card">
+                    <video src="videos/Avion.mp4" class="artwork-media" autoplay loop muted playsinline></video>
+                    <div class="artwork-info">
+                        <h3 class="artist-name" data-i18n="vid_avion_title">Fondos en Movimiento</h3>
+                        <p class="artwork-description" data-i18n="vid_avion_desc">Parallax y velocidad con múltiples planos de profundidad.</p>
+                    </div>
+                </div>
+                <div class="artwork-card">
+                    <video src="videos/Viejito en moto.mp4" class="artwork-media" autoplay loop muted playsinline></video>
+                    <div class="artwork-info">
+                        <h3 class="artist-name" data-i18n="vid_viejito_moto_title">Acción Dinámica</h3>
+                        <p class="artwork-description" data-i18n="vid_viejito_moto_desc">Animación de personajes en vehículos con sentido de velocidad.</p>
+                    </div>
+                </div>
+                <div class="artwork-card">
+                    <video src="videos/Animación 2.mp4" class="artwork-media" autoplay loop muted playsinline></video>
+                    <div class="artwork-info">
+                        <h3 class="artist-name" data-i18n="vid_animacion_2_title">Trazo Artístico</h3>
+                        <p class="artwork-description" data-i18n="vid_animacion_2_desc">Exploración de pinceles y texturas en movimiento.</p>
+                    </div>
+                </div>
+                <div class="artwork-card">
+                    <video src="videos/Animación de linea.mp4" class="artwork-media" autoplay loop muted playsinline></video>
+                    <div class="artwork-info">
+                        <h3 class="artist-name" data-i18n="vid_linea_title">Precisión de Trazo</h3>
+                        <p class="artwork-description" data-i18n="vid_linea_desc">Muestra la fidelidad del motor de dibujo en líneas finas.</p>
+                    </div>
+                </div>
+                <div class="artwork-card">
+                    <video src="videos/animacion.mp4" class="artwork-media" autoplay loop muted playsinline></video>
+                    <div class="artwork-info">
+                        <h3 class="artist-name" data-i18n="vid_animacion_general_title">Animación Creativa</h3>
+                        <p class="artwork-description" data-i18n="vid_animacion_general_desc">Un pequeño ejemplo del potencial de la herramienta.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="gallery">
+        <div class="container">
+            <div class="section-title">
+                <h2 data-i18n="gallery_title">Galería de la Comunidad</h2>
+                <p data-i18n="gallery_desc">El talento de nuestros usuarios no tiene límites</p>
+            </div>
+            <div class="gallery-grid">
+                <div class="artwork-card">
+                    <img src="images/Homerus.png" alt="Homerus" class="artwork-media">
+                    <div class="artwork-info">
+                        <h3 class="artist-name">Homerus</h3>
+                        <p class="artwork-description">Estudio de personaje con trazo dinámico.</p>
+                        <a href="https://www.facebook.com/profile.php?id=61575552203116&locale=es_LA" class="artist-link" target="_blank">Ver Perfil</a>
+                    </div>
+                </div>
                 <div class="artwork-card">
                     <img src="images/Viejo conejo.png" alt="Viejo conejo" class="artwork-media">
                     <div class="artwork-info">
-                        <h3 class="artist-name">Nombre del Artista</h3>
-                        <p class="artwork-description">Descripción breve de la obra o créditos adicionales.</p>
-                        <a class="artist-link" href="https://instagram.com/usuario" target="_blank"
-                            rel="noopener noreferrer">Visitar perfil</a>
+                        <h3 class="artist-name">Viejo Conejo</h3>
+                        <p class="artwork-description">Diseño detallado explorando la textura del dibujo tradicional.</p>
+                        <a href="https://www.facebook.com/profile.php?id=61575552203116&locale=es_LA" class="artist-link" target="_blank">Ver Perfil</a>
                     </div>
                 </div>
-
-                <!-- Duplicar este bloque para más imágenes -->
-                <div class="artwork-card">
-                    <img src="images/Homerus.png" alt="Viejo conejo" class="artwork-media">
-                    <div class="artwork-info">
-                        <h3 class="artist-name">Nombre del Artista</h3>
-                        <p class="artwork-description">Descripción breve de la obra o créditos adicionales.</p>
-                        <a class="artist-link" href="https://www.facebook.com/usuario" target="_blank"
-                            rel="noopener noreferrer">Visitar perfil</a>
-                    </div>
-                </div>
-
-                <!-- Puedes agregar más tarjetas aquí -->
             </div>
         </div>
     </section>
 
-    <section class="testimonials">
+    <section class="section testimonials">
         <div class="container">
-            <h2 class="section-title">Lo que dicen nuestros usuarios</h2>
-            <div class="testimonial-card">
-                <p class="testimonial-text">"Trazo Chino ha revolucionado mi flujo de trabajo. La interfaz es intuitiva
-                    y las herramientas son exactamente lo que necesito para mis proyectos de animación."</p>
-                <p class="testimonial-author">- María González, Animadora Freelance</p>
+            <div class="section-title">
+                <h2 data-i18n="testimonials_title">Confianza Artística</h2>
             </div>
-            <div class="testimonial-card">
-                <p class="testimonial-text">"Como profesor de arte digital, recomiendo Trazo Chino a todos mis
-                    estudiantes. Es potente pero fácil de aprender, ideal para principiantes y profesionales."</p>
-                <p class="testimonial-author">- Carlos Rodríguez, Profesor de Animación</p>
+            <div class="testimonial-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Trazo Chino ha simplificado mi proceso creativo. Las herramientas son naturales y el rendimiento es excepcional incluso en proyectos pesados."</p>
+                    <div class="testimonial-user">
+                        <div class="user-avatar">MG</div>
+                        <div class="user-info">
+                            <h4>María González</h4>
+                            <p>Concept Artist @ VFX Studio</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Lo que más valoro es la comunidad y el soporte constante. Es un software hecho pensando en los problemas reales que enfrentamos los animadores."</p>
+                    <div class="testimonial-user">
+                        <div class="user-avatar">CR</div>
+                        <div class="user-info">
+                            <h4>Carlos Rodríguez</h4>
+                            <p>Director de Animación Independiente</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="cta" id="download">
+    <section class="section cta" id="download">
         <div class="container">
-            <h2 class="section-title" style="color: white;">¿Listo para comenzar?</h2>
-            <p style="margin-bottom: 1rem;">Trazo Chino está disponible para Windows y para todas las distribuciones de
-                Linux.</p>
-            <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom: 1.5rem;">
-                <a href="https://www.mediafire.com/file/771cirkor3t7bu9/Trazo_Chino_1.0.rar/file" class="btn"
-                    style="background:#4fa5e2;">Descargar para Windows</a>
-                <a href="https://www.mediafire.com/file/nv8otj1ymttajfg/Trazo_Chino_para_Linux.rar/file" class="btn"
-                    style="background:#7DBE8C;">Descargar para Linux</a>
+            <h2 style="font-size: 3rem; margin-bottom: 1.5rem;" data-i18n="cta_title">Empieza a Crear Hoy</h2>
+            <p style="font-size: 1.2rem; margin-bottom: 2.5rem; max-width: 600px; margin-left: auto; margin-right: auto;" data-i18n="cta_desc">Únete a miles de artistas que ya están transformando sus ideas con Trazo Chino.</p>
+            <div class="btn-group">
+                <a href="https://www.mediafire.com/file/771cirkor3t7bu9/Trazo_Chino_1.0.rar/file" class="btn" data-i18n="download_windows">Descargar para Windows</a>
+                <a href="https://www.mediafire.com/file/nv8otj1ymttajfg/Trazo_Chino_para_Linux.rar/file" class="btn btn-outline" data-i18n="download_linux">Versión para Linux</a>
             </div>
-            <p style="opacity:0.9; margin-bottom: 1.2rem;">¿Quieres colaborar con el proyecto? También puedes usar
-                Gumroad:</p>
-            <a href="https://estebanmansilla.gumroad.com/l/jtkeak" class="btn btn-outline"
-                style="color:#fff; border-color:#fff;">Colaborar vía Gumroad</a>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <div class="footer-links">
-                <a href="#">Inicio</a>
-                <a href="#">Características</a>
-                <a href="#">Tutoriales</a>
-                <a href="#">Soporte</a>
-                <a href="#">Contacto</a>
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 1.5rem;">
+                        <span class="logo-icon">🖌️</span> <span>Trazo Chino</span>
+                    </div>
+                    <p>Potenciando la creatividad digital con herramientas de próxima generación.</p>
+                    <div class="social-links">
+                        <a href="https://www.facebook.com/profile.php?id=61575552203116&locale=es_LA" target="_blank">FB</a>
+                        <a href="https://www.instagram.com/trazochino?igsh=dGhxZGY5ZnAwZzhp" target="_blank">IG</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-title">Producto</h4>
+                    <div class="footer-links">
+                        <a href="#features">Funciones</a>
+                        <a href="#videos">Videos</a>
+                        <a href="#gallery">Galería</a>
+                        <a href="#">Tutoriales</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-title">Soporte</h4>
+                    <div class="footer-links">
+                        <a href="#">Ayuda</a>
+                        <a href="#">Contacto</a>
+                        <a href="#">Privacidad</a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4 class="footer-title" data-i18n="contact_us">Escríbenos</h4>
+                    <form action="https://formspree.io/f/mvgzqkpv" method="POST" class="contact-form">
+                        <input type="email" name="email" placeholder="Correo electrónico" required>
+                        <textarea name="message" placeholder="Mensaje" rows="3" required></textarea>
+                        <button type="submit" class="btn" style="width: 100%; padding: 10px;">Enviar</button>
+                    </form>
+                </div>
             </div>
-            <div class="social-links" aria-label="Redes sociales de Trazo Chino">
-                <a href="https://www.facebook.com/profile.php?id=61575552203116&locale=es_LA" target="_blank"
-                    rel="noopener noreferrer">Facebook</a>
-                <a href="https://www.instagram.com/trazochino?igsh=dGhxZGY5ZnAwZzhp" target="_blank"
-                    rel="noopener noreferrer">Instagram</a>
+            <div class="footer-bottom">
+                <p data-i18n="copyright">© 2026 Trazo Chino. Diseñado en Argentina para el mundo.</p>
             </div>
-            <p>&copy; 2026 Trazo Chino. Todos los derechos reservados.</p>
-            <form action="https://formspree.io/f/mvgzqkpv" method="POST" style="margin-top: 1rem;">
-                <label for="email" style="display: block; margin-bottom: 0.5rem;">Contáctanos:</label>
-                <input type="email" name="email" id="email" placeholder="Tu correo electrónico" required
-                    style="padding: 0.5rem; margin-bottom: 0.5rem; width: 100%; max-width: 300px;">
-                <textarea name="message" placeholder="Tu mensaje" required
-                    style="padding: 0.5rem; margin-bottom: 0.5rem; width: 100%; max-width: 300px;"></textarea>
-                <button type="submit" class="btn" style="padding: 0.5rem 1rem;">Enviar</button>
-            </form>
         </div>
     </footer>
+
+
+    <script>
+        (function () {
+            const translations = {
+                es: {
+                    brand: 'Trazo Chino',
+                    hero_title: 'Libera tu creatividad con <span style="color: var(--secondary-color);">Trazo Chino</span>',
+                    hero_subtitle: 'Software de animación y dibujo profesional diseñado por artistas para artistas. Herramientas intuitivas que rompen las barreras de la creación.',
+                    download_now: 'Descargar Ahora',
+                    explore_features: 'Explorar Funciones',
+                    features_title: 'Potencia tu Arte',
+                    features_desc: 'Todo lo que necesitas para llevar tus dibujos al siguiente nivel',
+                    feat_layers_title: 'Sistema de Capas Pro',
+                    feat_layers_desc: 'Gestión avanzada de capas con modos de fusión, máscaras y grupos para un control total sobre tu composición.',
+                    feat_timeline_title: 'Línea de Tiempo Fluida',
+                    feat_timeline_desc: 'Línea de tiempo basada en fotogramas clave con herramientas de cebolla (onion skinning) para animaciones perfectas.',
+                    feat_tools_title: 'Pinceles Adaptativos',
+                    feat_tools_desc: 'Motor de pinceles de alta respuesta con soporte para sensibilidad a la presión y estabilización de trazo.',
+                    feat_transform_title: 'Transformación No Destructiva',
+                    feat_transform_desc: 'Escala, rota y deforma tus dibujos sin perder calidad ni comprometer el trazo original.',
+                    feat_export_title: 'Renderizado de Alta Velocidad',
+                    feat_export_desc: 'Exporta tus obras maestras en múltiples formatos (MP4, GIF, PNG) con optimización para redes sociales.',
+                    feat_save_title: 'Flujo de Trabajo Cloud',
+                    feat_save_desc: 'Auto-guardado inteligente y compatibilidad con formatos estándar de la industria para integración perfecta.',
+                    gallery_title: 'Galería de la Comunidad',
+                    gallery_desc: 'El talento de nuestros usuarios no tiene límites',
+                    testimonials_title: 'Confianza Artística',
+                    cta_title: 'Empieza a Crear Hoy',
+                    cta_desc: 'Únete a miles de artistas que ya están transformando sus ideas con Trazo Chino.',
+                    download_windows: 'Descargar para Windows',
+                    download_linux: 'Versión para Linux',
+                    nav_home: 'Inicio',
+                    nav_features: 'Funciones',
+                    nav_videos: 'Videos',
+                    nav_tutorials: 'Tutoriales',
+                    nav_support: 'Soporte',
+                    nav_contact: 'Contacto',
+                    contact_us: 'Escríbenos',
+                    email_placeholder: 'Correo electrónico',
+                    message_placeholder: 'Mensaje',
+                    send: 'Enviar',
+                    copyright: '© 2026 Trazo Chino. Diseñado en Argentina para el mundo.',
+                    videos_section_title: 'Hecho con Trazo Chino',
+                    videos_section_desc: 'Mira la potencia de nuestras herramientas en acción',
+                    vid_raton_title: 'Dinámica de Personajes',
+                    vid_raton_desc: 'Simulación de fluidez y peso en animaciones 2D.',
+                    vid_viejito_girando_title: 'Perspectiva 3D',
+                    vid_viejito_girando_desc: 'Rotación de volúmenes compleja en entorno plano.',
+                    vid_avion_title: 'Fondos en Movimiento',
+                    vid_avion_desc: 'Parallax y velocidad con múltiples planos de profundidad.',
+                    vid_viejito_moto_title: 'Acción Dinámica',
+                    vid_viejito_moto_desc: 'Animación de personajes en vehículos con sentido de velocidad.',
+                    vid_animacion_2_title: 'Trazo Artístico',
+                    vid_animacion_2_desc: 'Exploración de pinceles y texturas en movimiento.',
+                    vid_linea_title: 'Precisión de Trazo',
+                    vid_linea_desc: 'Muestra la fidelidad del motor de dibujo en líneas finas.',
+                    vid_animacion_general_title: 'Animación Creativa',
+                    vid_animacion_general_desc: 'Un pequeño ejemplo del potencial de la herramienta.'
+                },
+                en: {
+                    brand: 'Trazo Chino',
+                    hero_title: 'Unleash your creativity with <span style="color: var(--secondary-color);">Trazo Chino</span>',
+                    hero_subtitle: 'Professional animation and drawing software designed by artists for artists. Intuitive tools that break the barriers of creation.',
+                    download_now: 'Start for Free',
+                    explore_features: 'Explore Features',
+                    features_title: 'Power your Art',
+                    features_desc: 'Everything you need to take your drawings to the next level',
+                    feat_layers_title: 'Pro Layer System',
+                    feat_layers_desc: 'Advanced layer management with blending modes, masks, and groups for total control over your composition.',
+                    feat_timeline_title: 'Fluid Timeline',
+                    feat_timeline_desc: 'Keyframe-based timeline with onion skinning tools for perfect animations.',
+                    feat_tools_title: 'Adaptive Brushes',
+                    feat_tools_desc: 'High-response brush engine with support for pressure sensitivity and stroke stabilization.',
+                    feat_transform_title: 'Non-Destructive Transform',
+                    feat_transform_desc: 'Scale, rotate and warp your drawings without losing quality or compromising the original stroke.',
+                    feat_export_title: 'High-Speed Rendering',
+                    feat_export_desc: 'Export your masterpieces in multiple formats (MP4, GIF, PNG) with optimization for social media.',
+                    feat_save_title: 'Cloud Workflow',
+                    feat_save_desc: 'Smart auto-save and compatibility with industry standard formats for seamless integration.',
+                    gallery_title: 'Community Gallery',
+                    gallery_desc: 'The talent of our users has no limits',
+                    testimonials_title: 'Artistic Trust',
+                    cta_title: 'Start Creating Today',
+                    cta_desc: 'Join thousands of artists who are already transforming their ideas with Trazo Chino.',
+                    download_windows: 'Download for Windows',
+                    download_linux: 'Version for Linux',
+                    nav_home: 'Home',
+                    nav_features: 'Features',
+                    nav_videos: 'Videos',
+                    nav_tutorials: 'Tutoriales',
+                    nav_support: 'Support',
+                    nav_contact: 'Contact',
+                    contact_us: 'Write to us',
+                    email_placeholder: 'Email',
+                    message_placeholder: 'Message',
+                    send: 'Send',
+                    copyright: '© 2026 Trazo Chino. Designed in Argentina for the world.',
+                    videos_section_title: 'Made with Trazo Chino',
+                    videos_section_desc: 'See the power of our tools in action',
+                    vid_raton_title: 'Character Dynamics',
+                    vid_raton_desc: 'Fluidity and weight simulation in 2D animations.',
+                    vid_viejito_girando_title: '3D Perspective',
+                    vid_viejito_girando_desc: 'Complex volume rotation in a flat environment.',
+                    vid_avion_title: 'Moving Backgrounds',
+                    vid_avion_desc: 'Parallax and speed with multiple depth planes.',
+                    vid_viejito_moto_title: 'Dynamic Action',
+                    vid_viejito_moto_desc: 'Character animation in vehicles with a sense of speed.',
+                    vid_animacion_2_title: 'Artistic Stroke',
+                    vid_animacion_2_desc: 'Exploration of brushes and textures in motion.',
+                    vid_linea_title: 'Line Precision',
+                    vid_linea_desc: 'Shows the fidelity of the drawing engine in fine lines.',
+                    vid_animacion_general_title: 'Creative Animation',
+                    vid_animacion_general_desc: 'A small example of the tool\'s potential.'
+                }
+            };
+
+
+
+            const els = document.querySelectorAll('[data-i18n], [data-i18n-placeholder]');
+            const buttons = document.querySelectorAll('.lang-btn');
+
+            function applyLang(lang) {
+                const dict = translations[lang] || translations.es;
+                els.forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    const phKey = el.getAttribute('data-i18n-placeholder');
+                    if (key && dict[key] !== undefined) {
+                        el.innerHTML = dict[key];
+                    }
+                    if (phKey && dict[phKey] !== undefined) {
+                        el.setAttribute('placeholder', dict[phKey]);
+                    }
+                });
+                document.documentElement.lang = lang;
+                buttons.forEach(b => b.classList.toggle('active', b.dataset.lang === lang));
+                localStorage.setItem('lang', lang);
+            }
+
+            buttons.forEach(btn => btn.addEventListener('click', () => applyLang(btn.dataset.lang)));
+
+            const saved = localStorage.getItem('lang') || 'es';
+            applyLang(saved);
+        })();
+    </script>
 </body>
 
 </html>
